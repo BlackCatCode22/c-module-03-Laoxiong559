@@ -1,6 +1,4 @@
-// singlyLinkedList.cpp
-// sample code for Module 03
-// dH, 2/13/15
+
 
 
 #include <iostream>
@@ -64,19 +62,15 @@ int main() {
 
     Node* head = nullptr;
 
-    // Call the insertEnd() function and pass it the address of head and an int value for the data field.
     insertEnd(&head, 1);
     insertEnd(&head, 2);
     insertEnd(&head, 3);
     insertEnd(&head, 4);
 
-    // Call the displayList() function and pass it the head of the list.
     displayList(head);
 
-    // Delete the third node (position starts from 0)
     deleteNode(&head, 2);
 
-    // Display the new list.
     cout << "\nList after deleting third node:\n";
     displayList(head);
 
