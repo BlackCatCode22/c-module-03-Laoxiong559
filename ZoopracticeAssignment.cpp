@@ -1,8 +1,9 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <map>
-#include <fstream>
 #include <string>
+
 
 class Animal {
 protected:
@@ -11,75 +12,186 @@ protected:
     std::string species;
 
 public:
-    Animal(std::string n, int a, std::string s) : name(n), age(a), species(s) {}
+
+    Animal(std::string name, int age, std::string species)
+        : name(name), age(age), species(species) {}
+
 
     std::string getName() const { return name; }
     int getAge() const { return age; }
     std::string getSpecies() const { return species; }
 
-    void setName(std::string n) { name = n; }
-    void setAge(int a) { age = a; }
-    void setSpecies(std::string s) { species = s; }
+
+    void setName(const std::string& name) { this->name = name; }
+    void setAge(int age) { this->age = age; }
+    void setSpecies(const std::string& species) { this->species = species; }
+
+
+    virtual void displayDetails() const {
+        std::cout << "Name: " << name << ", Age: " << age << ", Species: " << species << std::endl;
+    }
 };
+
 
 class Hyena : public Animal {
+private:
+    std::string laughType;
+
 public:
-    Hyena(std::string n, int a) : Animal(n, a, "Hyena") {}
+
+    Hyena(std::string name, int age, std::string laughType)
+        : Animal(name, age, "Hyena"), laughType(laughType) {}
+
+
+    std::string getLaughType() const { return laughType; }
+
+
+    void setLaughType(const std::string& laughType) { this->laughType = laughType; }
+
+
+    void displayDetails() const override {
+        Animal::displayDetails();
+        std::cout << "Laugh Type: " << laughType << std::endl;
+    }
 };
+
 
 class Lion : public Animal {
+private:
+    std::string maneColor;
+
 public:
-    Lion(std::string n, int a) : Animal(n, a, "Lion") {}
+
+    Lion(std::string name, int age, std::string maneColor)
+        : Animal(name, age, "Lion"), maneColor(maneColor) {}
+
+
+    std::string getManeColor() const { return maneColor; }
+
+
+    void setManeColor(const std::string& maneColor) { this->maneColor = maneColor; }
+
+
+    void displayDetails() const override {
+        Animal::displayDetails();
+        std::cout << "Mane Color: " << maneColor << std::endl;
+    }
 };
+
 
 class Tiger : public Animal {
+private:
+    std::string stripePattern;
+
 public:
-    Tiger(std::string n, int a) : Animal(n, a, "Tiger") {}
+
+    Tiger(std::string name, int age, std::string stripePattern)
+        : Animal(name, age, "Tiger"), stripePattern(stripePattern) {}
+
+
+    std::string getStripePattern() const { return stripePattern; }
+
+
+    void setStripePattern(const std::string& stripePattern) { this->stripePattern = stripePattern; }
+
+
+    void displayDetails() const override {
+        Animal::displayDetails();
+        std::cout << "Stripe Pattern: " << stripePattern << std::endl;
+    }
 };
 
+
 class Bear : public Animal {
+private:
+    std::string furColor;
+
 public:
-    Bear(std::string n, int a) : Animal(n, a, "Bear") {}
+
+    Bear(std::string name, int age, std::string furColor)
+        : Animal(name, age, "Bear"), furColor(furColor) {}
+
+
+    std::string getFurColor() const { return furColor; }
+
+
+    void setFurColor(const std::string& furColor) { this->furColor = furColor; }
+
+
+    void displayDetails() const override {
+        Animal::displayDetails();
+        std::cout << "Fur Color: " << furColor << std::endl;
+    }
 };
 
 int main() {
+
+    std::vector<std::string> hyenaNames = {
+        "Shenzi", "Banzai", "Ed", "Zig", "Bud", "Lou", "Kamari", "Wema", "Nne", "Madoa", "Prince Nevarah"
+    };
+
+    std::vector<std::string> lionNames = {
+        "Scar", "Mufasa", "Simba", "Kiara", "King", "Drooper", "Kimba", "Nala", "Leo", "Samson", "Elsa", "Cecil"
+    };
+
+    std::vector<std::string> bearNames = {
+        "Yogi", "Smokey", "Paddington", "Lippy", "Bungle", "Baloo", "Rupert", "Winnie the Pooh", "Snuggles", "Bert"
+    };
+
+    std::vector<std::string> tigerNames = {
+        "Tony", "Tigger", "Amber", "Cosimia", "Cuddles", "Dave", "Jiba", "Rajah", "Rayas", "Ryker"
+    };
+
     std::vector<Animal*> animals;
+
+    for (const auto& name : hyenaNames) {
+        animals.push_back(new Hyena(name, 5, "Cackling"));
+    }
+
+    for (const auto& name : lionNames) {
+        animals.push_back(new Lion(name, 7, "Golden"));
+    }
+
+    for (const auto& name : bearNames) {
+        animals.push_back(new Bear(name, 3, "Brown"));
+    }
+
+    for (const auto& name : tigerNames) {
+        animals.push_back(new Tiger(name, 9, "Striped"));
+    }
+
+
     std::map<std::string, int> speciesCount;
-    std::ifstream inputFile("arrivingAnimals.txt");
-    std::ofstream outputFile("newAnimals.txt");
-    std::string name, species;
-    int age;
-
-    while (inputFile >> name >> age >> species) {
-        Animal* animal = nullptr;
-        if (species == "Hyena") {
-            animal = new Hyena(name, age);
-        } else if (species == "Lion") {
-            animal = new Lion(name, age);
-        } else if (species == "Tiger") {
-            animal = new Tiger(name, age);
-        } else if (species == "Bear") {
-            animal = new Bear(name, age);
-        }
-
-        if (animal) {
-            animals.push_back(animal);
-            speciesCount[species]++;
-        }
-    }
-
-    for (const auto& entry : speciesCount) {
-        outputFile << "Species: " << entry.first << ", Count: " << entry.second << "\n";
-    }
 
     for (const auto& animal : animals) {
-        outputFile << "Name: " << animal->getName() << ", Age: " << animal->getAge() << ", Species: " << animal->getSpecies() << "\n";
+        speciesCount[animal->getSpecies()]++;
     }
 
-    inputFile.close();
+
+    std::ofstream outputFile("newAnimals.txt");
+    if (!outputFile.is_open()) {
+        std::cerr << "Error opening output file." << std::endl;
+        return 1;
+    }
+
+    for (const auto& pair : speciesCount) {
+        outputFile << "Species: " << pair.first << std::endl;
+        outputFile << "Count: " << pair.second << std::endl;
+
+        for (const auto& animal : animals) {
+            if (animal->getSpecies() == pair.first) {
+                animal->displayDetails();
+                outputFile << std::endl;
+            }
+        }
+
+        outputFile << std::endl;
+    }
+
     outputFile.close();
 
-    for (auto animal : animals) {
+
+    for (auto& animal : animals) {
         delete animal;
     }
 
